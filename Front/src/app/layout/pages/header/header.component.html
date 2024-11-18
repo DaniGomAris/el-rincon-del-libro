@@ -31,7 +31,6 @@
       <li><a [routerLink]="['/empresa']">Empresa</a></li> 
       <li><a [routerLink]="['/contacto']">Contacto</a></li>
 
-      <!-- Menú de sesión -->
       <li *ngIf="!usuarioLogueado" (click)="toggleSesionMenu()" class="user-login">
         <a href="javascript:void(0)">Hola, Inicia Sesión</a>
         <div *ngIf="sesionMenuVisible" class="sesion-menu">
@@ -40,7 +39,6 @@
         </div>
       </li>  
       
-      <!-- Mostrar cuando el usuario está logueado -->
       <li *ngIf="usuarioLogueado" class="user-login">
         <a href="javascript:void(0)">Hola, {{ usuarioLogueado }}</a>
         <div *ngIf="sesionMenuVisible" class="sesion-menu">

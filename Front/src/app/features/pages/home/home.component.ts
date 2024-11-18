@@ -62,7 +62,6 @@ export class HomeComponent implements OnInit {
     this.cargarLibrosPorGenero(generoAleatorio);
   }
 
-  // Metodo para generar una lista de generos aleatorios
   generarGenerosAleatorios(): void {
     const generosCopia = [...this.generos];
     this.generosAleatorios = [];
@@ -73,13 +72,11 @@ export class HomeComponent implements OnInit {
     }
   }
 
-  // Metodo para filtrar libros por genero
   filtrarPorGenero(genero: string): void {
     this.generoSeleccionado = genero;
     this.cargarLibrosPorGenero(genero);
   }
 
-  // Metodo para cargar los libros segun el genero
   cargarLibrosPorGenero(genero: string): void {
     this.libroService.buscarLibros(genero).subscribe((response: any) => {
       this.libros = response.docs.slice(0, 30);
@@ -93,14 +90,12 @@ export class HomeComponent implements OnInit {
     return this.precios[index] || 32;
   }
 
-  // Metodo para mostrar libros aleatorios
   mostrarLibrosAleatorios(): void {
     const librosShuffle = [...this.libros];
     librosShuffle.sort(() => Math.random() - 0.5);
     this.librosAleatorios = librosShuffle.slice(0, 10);
   }
 
-  // Metodo para agregar libros al carrito
   agregarAlCarrito(libro: any) {
     const libroConPrecio = { ...libro, precio: this.precios[this.libros.indexOf(libro)] };
     this.cartService.agregarAlCarrito(libroConPrecio);

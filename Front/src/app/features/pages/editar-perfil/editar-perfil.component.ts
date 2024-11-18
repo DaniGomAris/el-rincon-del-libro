@@ -8,7 +8,7 @@ import { FooterComponent } from "../../../layout/pages/footer/footer.component";
 @Component({
   selector: 'app-editar-perfil',
   standalone: true,
-  imports: [HeaderComponent, FooterComponent, ReactiveFormsModule],  // Importar ReactiveFormsModule
+  imports: [HeaderComponent, FooterComponent, ReactiveFormsModule],
   templateUrl: './editar-perfil.component.html',
   styleUrls: ['./editar-perfil.component.css']
 })
