@@ -27,24 +27,21 @@ export class SignUpComponent {
     private fb: FormBuilder,
     private router: Router
   ) {
+    // Crear el formulario con validaciones
     this.registerForm = this.fb.group({
       nombre: ['', Validators.required],
-      apellido: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(6)]]
     });
   }
 
+  // Metodo para registrar al usuario
   onRegister() {
-    console.log('Formulario enviado');
     if (this.registerForm.valid) {
-      const { nombre, apellido, email, password } = this.registerForm.value;
-  
-      console.log('Datos del formulario:', { nombre, apellido, email, password });
-  
-      this.usuarioService.register(nombre, apellido, email, password).subscribe({
+      const { nombre, email, password } = this.registerForm.value;
+
+      this.usuarioService.register(nombre, email, password).subscribe({
         next: (response) => {
-          console.log('Usuario registrado exitosamente:', response);
           this.router.navigate(['/sign-in']);
         },
         error: (error) => {

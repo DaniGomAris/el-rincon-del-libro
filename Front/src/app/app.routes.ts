@@ -6,6 +6,8 @@ import { CartPageComponent } from './features/pages/cart-page/cart-page.componen
 import { EmpresaPageComponent } from './features/pages/empresa-page/empresa-page.component';
 import { ContactoPageComponent } from './features/pages/contacto-page/contacto-page.component';
 import { InformacionLibroComponent } from './features/pages/informacion-libro/informacion-libro.component';
+import { InformacionPerfilComponent } from './features/pages/informacion-perfil/informacion-perfil.component';
+import { EditarPerfilComponent } from './features/pages/editar-perfil/editar-perfil.component';
 
 export const routes: Routes = [
     {path: 'sign-in', component:SignInComponent},
@@ -15,5 +17,7 @@ export const routes: Routes = [
     {path: 'empresa', component:EmpresaPageComponent},
     {path: 'contacto', component:ContactoPageComponent},
     {path: 'informacion-libro/:id', component:InformacionLibroComponent},
+    {path: 'informacion-perfil', component:InformacionPerfilComponent},
+    {path: 'editar-perfil', component:EditarPerfilComponent},
     {path: '', redirectTo:'home', pathMatch:'full'}
 ];

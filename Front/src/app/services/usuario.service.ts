@@ -1,65 +1,60 @@
+// usuario.service.ts
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class UsuarioService {
-  private apiUrl = 'http://localhost:3001';
+  private apiUrl = 'http://localhost:3000';
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {}
 
-  // Iniciar sesión
   login(email: string, password: string): Observable<any> {
     return this.http.post(`${this.apiUrl}/user/login`, { email, password });
   }
 
-  // Registrar un nuevo usuario
-  register(nombre: string, apellido: string, email: string, password: string): Observable<any> {
-    const userData = { nombre, apellido, email, password };
-    return this.http.post(`${this.apiUrl}/user/create`, userData);
+  register(nombre: string, email: string, password: string): Observable<any> {
+    return this.http.post(`${this.apiUrl}/user/create`, {
+      nombre,
+      email,
+      password,
+    });
   }
 
-  // Actualizar el usuario
-  updateUser(nombre: string, apellido: string, email: string, password: string, token: string): Observable<any> {
-    const headers = { 'Authorization': `Bearer ${token}` };
-    return this.http.post(`${this.apiUrl}/user/update`, { nombre, apellido, email, password }, { headers });
+  updateUser(nombre: string, email: string, fecha_nacimiento: string): Observable<any> {
+    const token = this.getToken();
+    const headers = new HttpHeaders().set('x-token', token || '');
+    return this.http.post(
+      `${this.apiUrl}/user/update`,
+      { nombre, email, fecha_nacimiento },
+      { headers }
+    );
   }
 
-  // Guardar la sesión del usuario en el LocalStorage, solo en el navegador
-  setSession(userData: any): void {
-    if (typeof window !== 'undefined') {
-      localStorage.setItem('user', JSON.stringify(userData));
+  setSession(response: any): void {
+    if (response.ok && response.token) {
+      localStorage.setItem('token', response.token);
+      localStorage.setItem('usuario', JSON.stringify(response.usuario));
     }
   }
 
-  // Cerrar sesión, solo en el navegador
+  getToken(): string | null {
+    return localStorage.getItem('token');
+  }
+
   logout(): void {
-    if (typeof window !== 'undefined') {
-      const user = JSON.parse(localStorage.getItem('user')!);
-      if (user) {
-        user.isLoggedIn = false;
-        localStorage.setItem('user', JSON.stringify(user));
-      }
-      localStorage.removeItem('user');
-    }
-  }
-  
-  // Verificar si el usuario está logueado, solo en el navegador
-  isLoggedIn(): boolean {
-    if (typeof window !== 'undefined') {
-      return localStorage.getItem('user') !== null;
-    }
-    return false;
+    localStorage.removeItem('token');
+    localStorage.removeItem('usuario');
   }
 
-  // Obtener el nombre del usuario logueado, solo en el navegador
+  isLoggedIn(): boolean {
+    return !!this.getToken();
+  }
+
   getUsername(): string | null {
-    if (typeof window !== 'undefined') {
-      const user = localStorage.getItem('user');
-      return user ? JSON.parse(user).nombre : null;
-    }
-    return null;
+    const usuario = localStorage.getItem('usuario');
+    return usuario ? JSON.parse(usuario).nombre : null;
   }
 }
