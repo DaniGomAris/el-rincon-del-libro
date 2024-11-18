@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { UsuarioService } from '../../../services/usuario.service';
 import { HeaderComponent } from "../../../layout/pages/header/header.component";
 import { FooterComponent } from "../../../layout/pages/footer/footer.component";
 import { RouterLink } from '@angular/router';
@@ -8,8 +9,25 @@ import { RouterLink } from '@angular/router';
   standalone: true,
   imports: [HeaderComponent, FooterComponent, RouterLink],
   templateUrl: './informacion-perfil.component.html',
-  styleUrl: './informacion-perfil.component.css'
+  styleUrls: ['./informacion-perfil.component.css']
 })
-export class InformacionPerfilComponent {
+export class InformacionPerfilComponent implements OnInit {
+  nombre: string | null = '';
+  apellido: string | null = '';
+  email: string | null = '';
 
+  constructor(private UsuarioService: UsuarioService) { }
+
+  ngOnInit(): void {
+    this.getUserInfo();
+  }
+
+  getUserInfo(): void {
+    const user = JSON.parse(localStorage.getItem('user')!);
+    if (user) {
+      this.nombre = user.nombre;
+      this.apellido = user.apellido;
+      this.email = user.email;
+    }
+  }
 }

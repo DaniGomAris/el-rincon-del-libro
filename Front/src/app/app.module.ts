@@ -5,7 +5,6 @@ import { HeaderComponent } from './layout/pages/header/header.component';
 import { FooterComponent } from './layout/pages/footer/footer.component';
 import { HomeComponent } from './features/pages/home/home.component';
 import { SignInComponent } from './auth/pages/sign-in/sign-in.component';
-import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
@@ -23,10 +22,9 @@ import { ReactiveFormsModule } from '@angular/forms';
   imports: [
     BrowserModule,
     HttpClientModule,
-    FormsModule,
+    ReactiveFormsModule,
     RouterModule,
-    CommonModule,
-    ReactiveFormsModule
+    CommonModule
   ],
   providers: [CartService],
   bootstrap: [AppComponent],

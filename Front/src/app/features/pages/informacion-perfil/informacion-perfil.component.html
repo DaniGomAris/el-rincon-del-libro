@@ -1,1 +1,17 @@
-<p>informacion-perfil works!</p>
+<div class="profile-container">
+    <app-header></app-header> <!-- Incluye el encabezado -->
+    
+    <div class="profile-info">
+      <h2>Información del Perfil</h2>
+      <div class="user-details">
+        <p><strong>Nombre:</strong> {{ nombre }}</p>
+        <p><strong>Apellido:</strong> {{ apellido }}</p>
+        <p><strong>Correo:</strong> {{ email }}</p>
+      </div>
+      
+      <button class="edit-button" [routerLink]="['/editar-perfil']">Editar</button>
+    </div>
+    
+    <app-footer></app-footer> <!-- Incluye el pie de página -->
+  </div>
+  
