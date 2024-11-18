@@ -1,4 +1,3 @@
-// usuario.service.ts
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
@@ -28,29 +27,39 @@ export class UsuarioService {
     return this.http.post(`${this.apiUrl}/user/update`, { nombre, apellido, email, password }, { headers });
   }
 
-  // Guardar la sesión del usuario en el LocalStorage
+  // Guardar la sesión del usuario en el LocalStorage, solo en el navegador
   setSession(userData: any): void {
-    localStorage.setItem('user', JSON.stringify(userData));
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('user', JSON.stringify(userData));
+    }
   }
 
-  // Cerrar sesión
+  // Cerrar sesión, solo en el navegador
   logout(): void {
-    const user = JSON.parse(localStorage.getItem('user')!);
-    if (user) {
-      user.isLoggedIn = false;
-      localStorage.setItem('user', JSON.stringify(user));
+    if (typeof window !== 'undefined') {
+      const user = JSON.parse(localStorage.getItem('user')!);
+      if (user) {
+        user.isLoggedIn = false;
+        localStorage.setItem('user', JSON.stringify(user));
+      }
+      localStorage.removeItem('user');
     }
-    localStorage.removeItem('user'); // Se recomienda eliminar el usuario al cerrar sesión
   }
   
-  // Verificar si el usuario está logueado
+  // Verificar si el usuario está logueado, solo en el navegador
   isLoggedIn(): boolean {
-    return localStorage.getItem('user') !== null;
+    if (typeof window !== 'undefined') {
+      return localStorage.getItem('user') !== null;
+    }
+    return false;
   }
 
-  // Obtener el nombre del usuario logueado
+  // Obtener el nombre del usuario logueado, solo en el navegador
   getUsername(): string | null {
-    const user = localStorage.getItem('user');
-    return user ? JSON.parse(user).nombre : null;
+    if (typeof window !== 'undefined') {
+      const user = localStorage.getItem('user');
+      return user ? JSON.parse(user).nombre : null;
+    }
+    return null;
   }
 }
