@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, ConflictException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Usuario } from '../entities/usuario.entity';
@@ -12,7 +12,13 @@ export class UsuariosService {
 
   // Registrar un nuevo usuario
   async createUser(usuario: Partial<Usuario>): Promise<Usuario> {
-    return this.usuariosRepository.save(usuario);
+    const existingUser = await this.usuariosRepository.findOne({ where: { email: usuario.email } });
+    if (existingUser) {
+      throw new ConflictException('El correo electrónico ya está en uso');
+    }
+
+    const newUser = this.usuariosRepository.create(usuario);
+    return this.usuariosRepository.save(newUser);
   }
 
   // Obtener un usuario por email
@@ -22,6 +28,11 @@ export class UsuariosService {
 
   // Actualizar un usuario
   async updateUser(id: number, updates: Partial<Usuario>): Promise<Usuario> {
+    const user = await this.usuariosRepository.findOne({ where: { id } });
+    if (!user) {
+      throw new Error('Usuario no encontrado');
+    }
+
     await this.usuariosRepository.update(id, updates);
     return this.usuariosRepository.findOne({ where: { id } });
   }
