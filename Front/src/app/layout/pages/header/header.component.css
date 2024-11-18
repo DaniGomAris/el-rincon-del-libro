@@ -1,0 +1,325 @@
+/* links del header */
+a:link, a:visited { 
+    color: #e6e154; 
+    text-decoration: none; 
+    font-weight: bold;
+} 
+
+a:active, a:hover { 
+    color: #e6e154; 
+    text-decoration: underline;
+}
+
+p {
+    margin: 0px;
+    padding: 0px;
+}
+
+img {
+    margin: 0px;
+    padding: 0px;
+    border: none;
+}
+
+.cleaner {
+    clear: both;
+    width: 100%;
+    height: 1px;
+    font-size: 1px;    
+}
+
+.cleaner_with_height {
+    clear: both;
+    width: 100%;
+    height: 30px;
+    font-size: 1px;    
+}
+
+.cleaner_with_width {
+    float: left;
+    width: 20px;
+    height: 30px;
+    font-size: 1px;    
+}
+
+.buy_now_button a {
+    clear: both;
+    text-align: center;
+    display: block;
+    width: 100px;
+    padding: 4px 0 5px 0;
+    margin-bottom: 10px; 
+    background: url(/assets/btn_02.jpg) no-repeat;
+    color: #FFFFFF;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+.detail_button a {
+    clear: both;
+    text-align: center;
+    display: block;
+    width: 100px;
+    padding: 4px 0 5px 0;
+    margin-bottom: 10px; 
+    background: url(/assets/btn_01.jpg) no-repeat;
+    color: #ffffff;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+
+
+
+
+body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    background-color: #f1f1f1;
+}
+
+#container {
+    width: 100%;
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 0 10px;
+    background: #1c1c1b url(/assets/bg.jpg) repeat-y;
+    flex-grow: 1;
+}
+
+
+
+
+
+
+/* menu */
+#menu {
+    width: 100%;
+    height: 45px;
+    background: url(/assets/menu_bg.jpg) no-repeat center center;
+    background-size: contain;
+    display: flex;
+    justify-content: center;
+    align-items: center; 
+    white-space: nowrap;
+}
+
+#menu ul {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 0;
+    padding: 13px 0 0 0;
+    list-style: none;
+}
+
+#menu ul li {
+    display: inline-block;
+}
+
+#menu ul li a {
+    padding: 0 10px;
+    font-size: 12px;
+    font-weight: bold;
+    text-align: center;
+    text-decoration: none;
+    color: #969547;
+}
+
+#menu ul li a img {
+    margin: 0;
+    padding: 0;
+    vertical-align: middle;
+}
+
+.cart-icon i {
+    font-size: 25px;
+}
+
+.logo {
+    height: 40px; /* Ajusta la altura según lo que necesites */
+    width: auto;  /* Mantiene la proporción de la imagen */
+  }
+
+
+
+
+
+/* Estilos para la barra de búsqueda */
+.search-bar {
+    display: flex;
+    align-items: center;
+    position: relative;
+}
+
+.search-bar input {
+    width: 400px;
+    background-color: #b6b58c;
+    padding: 5px;
+    font-size: 14px;
+    vertical-align: middle;
+    border: none;
+}
+
+.search-bar button {
+    padding: 5px 10px;
+    color: white;
+    background-color: #969547;
+    border: none;
+    cursor: pointer;
+}
+
+.search-bar button i {
+    font-size: 16px;
+}
+
+
+
+
+
+/* Estilos para el cuadro de resultados de búsqueda */
+.resultados-libros {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    max-height: 200px;
+    overflow-y: auto;
+    background-color: #b6b58c;
+    color: rgb(0, 0, 0);
+    border: 1px solid #ccc;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    z-index: 10;
+    padding: 10px 0;
+    text-align: left;
+}
+
+.resultados-libros ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.resultado-libro {
+    padding: 8px 16px;
+    font-size: 10px;
+    width: 100%;
+}
+
+.resultado-libro:hover {
+    background-color: #969547;
+    cursor: pointer;
+}
+
+
+
+
+
+/* Menu que se despliega */
+.user-login {
+    position: relative;
+}
+
+.sesion-menu {
+    position: absolute;
+    top: 25px;
+    left: 0;
+    background-color: #b6b58c;
+    color: black;
+    padding: 7px;
+    width: 130px;
+    z-index: 1000;
+    text-align: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.sesion-menu p a, .sesion-menu a {
+    color: black !important;
+    font-weight: bold;
+}
+
+.sesion-menu p a:hover, .sesion-menu a:hover {
+    background-color: #969547;
+    color: black;
+}
+
+  
+
+
+
+/* header */
+#header {
+    width: 100%;
+    max-width: 960px;
+    height: 285px;
+    padding: 0;
+    margin: 0 auto;
+    background: url(/assets/header_bg.jpg) no-repeat;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+#header a, a:hover {
+    color: #ffffff;
+}
+
+
+
+
+
+/* texto abajo de ofertas especiales */
+#special_offers {
+    float: left;
+    font-size: 14px;    
+    margin-top: 0px;
+    margin-left: 490px;
+    width: 180px;
+}
+
+#special_offers p span {
+    font-size: 20px;
+}
+
+#special_offers  p {
+    margin: 0 0 20px 0;
+    font-size: 15px;
+}
+
+#special_offers a {
+    font-size: 12px;
+}
+
+
+
+/* texto abajo de nuevos libros*/
+#new_books {
+    float: left;
+    margin-top: -10px;    
+    margin-left: 55px;
+    width: 180px;
+}
+
+#new_books ul {
+     margin: 0 0 10px 0;
+     padding: 0 0 0 20px;
+     font-size: 15px;
+}
+
+#new_books li {
+     margin: 0;
+     padding: 0; 
+}
+
+#new_books a {
+    font-size: 12px;
+}

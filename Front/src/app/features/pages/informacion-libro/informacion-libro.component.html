@@ -1,0 +1,13 @@
+<app-header></app-header>
+<div class="info-libro-container">
+    <a class="back-link" (click)="regresar()">← Volver</a>
+    <div class="info-libro">
+        <h1>{{ libro.title }}</h1>
+        <img [src]="libro.cover_i ? 'https://covers.openlibrary.org/b/id/' + libro.cover_i + '-M.jpg' : 'assets/image_01.jpg'" alt="{{ libro.title }}">
+        <p><strong>Autor:</strong> {{ libro.author_name }}</p>
+        <p><strong>Año de publicación:</strong> {{ libro.first_publish_year }}</p>
+        <h3><strong>Precio:</strong> ${{ precio }}</h3>
+        <button (click)="agregarAlCarrito()">Agregar al carrito</button>
+    </div>
+</div>
+<app-footer></app-footer>

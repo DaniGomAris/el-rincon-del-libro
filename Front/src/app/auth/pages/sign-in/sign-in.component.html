@@ -1,0 +1,23 @@
+<app-header></app-header>
+<div id="content">
+  <main>
+    <div class="login-box">
+      <h1>Iniciar Sesión</h1>
+      <form (ngSubmit)="onLogin()">
+        <div class="input-group">
+          <input type="email" [(ngModel)]="email" name="email" placeholder="Correo electrónico" required />
+        </div>
+
+        <div class="input-group">
+          <input type="password" [(ngModel)]="password" name="password" placeholder="Contraseña" required />
+        </div>
+
+        <button type="submit">Entrar</button>
+        <p class="error-message" *ngIf="errorMessage">{{ errorMessage }}</p>
+      </form>
+      <hr>
+      <p>No tienes una cuenta? <a [routerLink]="['/sign-up']">Crear cuenta</a></p>
+    </div>
+  </main>
+</div>
+<app-footer></app-footer>

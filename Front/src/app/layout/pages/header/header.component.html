@@ -1,0 +1,73 @@
+<header>
+  <div id="menu">
+    <ul>
+      <li>
+        <a [routerLink]="['/home']" class="current">
+          <img src="/assets/logo.png" alt="Logo" class="logo" />
+        </a>
+      </li>
+      <li>      
+        <div class="search-bar">
+          <input
+            type="text"
+            [(ngModel)]="tituloBusqueda"
+            placeholder="Escribe el título del libro"
+            (keyup.enter)="buscarLibros()"
+          />
+          <button (click)="buscarLibros()">
+            <i class="fas fa-search"></i>
+          </button>
+
+          <div *ngIf="resultadosVisible" class="resultados-libros">
+            <ul>
+              <li *ngFor="let libro of libros" class="resultado-libro" (click)="irAInformacionLibro(libro.key)">
+                <strong>{{ libro.title }}</strong>
+                <span *ngIf="libro.author_name"> - {{ libro.author_name.join(', ') }}</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </li>
+      <li><a [routerLink]="['/empresa']">Empresa</a></li> 
+      <li><a [routerLink]="['/contacto']">Contacto</a></li>
+
+      <!-- Menú de sesión -->
+      <li *ngIf="!usuarioLogueado" (click)="toggleSesionMenu()" class="user-login">
+        <a href="javascript:void(0)">Hola, Inicia Sesión</a>
+        <div *ngIf="sesionMenuVisible" class="sesion-menu">
+          <p><a [routerLink]="['/sign-in']">Iniciar sesión</a></p>
+          <p><a [routerLink]="['/sign-up']">Registrarse</a></p>
+        </div>
+      </li>  
+      
+      <!-- Mostrar cuando el usuario está logueado -->
+      <li *ngIf="usuarioLogueado" class="user-login">
+        <a href="javascript:void(0)">Hola, {{ usuarioLogueado }}</a>
+        <div *ngIf="sesionMenuVisible" class="sesion-menu">
+          <p><a [routerLink]="['/perfil']">Mi Perfil</a></p>
+          <p><a href="javascript:void(0)" (click)="cerrarSesion()">Cerrar sesión</a></p>
+        </div>
+      </li>
+
+      <li><a [routerLink]="['/cart']" class="cart-icon"><i class="fas fa-shopping-cart"></i></a></li>
+    </ul>
+  </div>
+
+  <div id="header">
+    <div id="special_offers">
+      <p>
+        <span>25%</span> de descuento en compras superiores a 80.000$
+      </p>
+      <a href="#">Leer más...</a>
+    </div>
+
+    <div id="new_books">
+      <ul>
+        <li>Suspenso</li>
+        <li>Misterio</li>
+        <li>Ficción</li>
+      </ul>
+      <a href="#">Leer más...</a>
+    </div>
+  </div>
+</header>

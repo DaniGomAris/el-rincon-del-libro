@@ -1,0 +1,40 @@
+<app-header></app-header>
+<div id="container">
+    <div id="content">
+        <h1 class="title">Carrito</h1>
+        <div id="content_right">
+            <div class="table-wrapper">
+                <table class="cart-table">
+                    <tbody>
+                        <tr *ngFor="let libro of carrito; let i = index">
+                            <td>
+                                <img [src]="libro.cover_i ? 'https://covers.openlibrary.org/b/id/' + libro.cover_i + '-M.jpg' : 'assets/image_01.jpg'" 
+                                     alt="{{ libro.title }}" class="product-image">
+                            </td>
+                            <td>{{ libro.title }}</td>
+                            <td>{{ libro.author_name }}</td>
+                            <td>
+                                <input type="number" [(ngModel)]="libro.cantidad" min="1" class="quantity" (ngModelChange)="actualizarPrecio(i)">
+                            </td>
+                            <td>${{libro.precio * libro.cantidad}}</td>
+                            <td>
+                                <button class="remove-item" (click)="eliminarDelCarrito(i)">
+                                    <i class="fas fa-trash"></i> Eliminar
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="total-price-container">
+                <button class="total-price-button">
+                    Precio Total: ${{ total || 0 }}
+                </button>
+            </div>
+            <<div class="buy-button-container">
+                <button class="buy-button" (click)="procederAlPago()">Proceder al pago</button>
+            </div>
+        </div>
+    </div>
+</div>
+<app-footer></app-footer>

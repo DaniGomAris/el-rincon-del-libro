@@ -1,0 +1,71 @@
+.info-libro-container {
+    padding: 20px;
+    max-width: 800px;
+    margin: auto;
+}
+  
+.back-link {
+    color: white;
+    text-decoration: none;
+    font-size: 20px;
+    display: inline-block;
+    margin-bottom: 20px;
+    cursor: pointer;
+    transition: color 0.3s ease;
+}
+
+.back-link:hover {
+    color: #aaaaaa;
+}
+
+.info-libro {
+    background-color: #292727;
+    border-radius: 10px;
+    padding: 30px;
+    text-align: center;
+}
+
+.info-libro img {
+    max-width: 300px;
+    margin: 20px 0;
+}
+
+.info-libro h1 {
+    font-size: 24px;
+    margin-bottom: 15px;
+    color: white;
+}
+
+.info-libro p {
+    font-size: 16px;
+    color: white;
+    margin: 10px 0;
+}
+
+.info-libro h3 {
+    font-size: 22px;
+    color: white;
+    margin: 20px 0;
+}
+
+button {
+    background-color: #000000;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    border-radius: 5px;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+    margin: 10px;
+}
+
+button:hover {
+    background-color: #414242;
+}
+
+button:active {
+    transform: scale(0.98);
+}
+  
+  

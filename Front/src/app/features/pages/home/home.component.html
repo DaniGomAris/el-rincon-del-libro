@@ -1,0 +1,54 @@
+<app-header></app-header>
+<div id="container">
+    <div id="content">
+        <div id="content_left">
+            <div class="content_left_section">
+                <h1>Categorías</h1>
+                <ul>
+                    <li *ngFor="let genero of generosAleatorios">
+                        <a href="javascript:void(0);" (click)="filtrarPorGenero(genero)">
+                            {{ genero | titlecase }}
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            
+            <div class="content_left_section">
+                <h1>Más Vendidos</h1>
+                <ul>
+                    <li *ngFor="let libro of librosAleatorios">
+                        <a [routerLink]="['/informacion-libro', libro.key]" [state]="{ libro: libro, precio: obtenerPrecio(libro) }">
+                            {{ libro.title }}
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <div id="content_right">
+            <div class="product_box" *ngFor="let libro of libros; let i = index">
+                <h1>{{ libro.title }}</h1>
+                <img [src]="libro.cover_i ? 'https://covers.openlibrary.org/b/id/' + libro.cover_i + '-M.jpg' : 'assets/image_01.jpg'" alt="{{ libro.title }}">
+                <div class="product_info">
+                    <p>{{ libro.author_name }}</p>
+                    <p>{{ libro.first_publish_year }}</p>
+                    <h3>${{ precios[i] || "$32" }}</h3>
+                    <div class="buy_now_button">
+                        <a href="javascript:void(0);" (click)="agregarAlCarrito(libro)">Agregar</a>
+                    </div>
+                    <div class="detail_button">
+                        <a [routerLink]="['/informacion-libro', libro.key]" [state]="{ libro: libro, precio: precios[i] }">Detalles</a>
+                    </div>
+                </div>
+                <div class="cleaner">&nbsp;</div>
+            </div>
+
+            <div class="cleaner_with_width">&nbsp;</div>
+
+            <a href="" class="ads-container">
+                <img src="/assets/ads.jpg" alt="publicidad">
+            </a>
+        </div>
+    </div>
+</div>
+<app-footer></app-footer>
