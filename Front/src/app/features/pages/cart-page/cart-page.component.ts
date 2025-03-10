@@ -55,4 +55,12 @@ export class CartPageComponent implements OnInit {
     this.carrito = [];
     this.total = 0;
   }
+
+  eliminarCarrito() {
+    alert("Libros del carrito eliminados");
+
+    this.cartService.limpiarCarrito();
+    this.carrito = [];
+    this.total = 0;
+  }
 }

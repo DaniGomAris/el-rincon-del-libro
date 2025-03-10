@@ -26,6 +26,9 @@
                     </tbody>
                 </table>
             </div>
+            <<div class="empty-button-container">
+                <button class="empty-button" (click)="eliminarCarrito()">Vaciar carrito</button>
+            </div>
             <div class="total-price-container">
                 <button class="total-price-button">
                     Precio Total: ${{ total || 0 }}

@@ -62,6 +62,27 @@
 }
 
 /* Boton comprar*/
+.empty-button-container {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.empty-button {
+    background-color: #ff0800;
+    color: white;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    display: inline-block;
+}
+
+.empty-button:hover {
+    background-color: #5c1818;
+}
+
+/* Boton comprar*/
 .buy-button-container {
     text-align: center;
     margin-top: 20px;
