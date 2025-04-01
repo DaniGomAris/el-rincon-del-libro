@@ -16,18 +16,24 @@ export class InformacionPerfilComponent implements OnInit {
   apellido: string | null = '';
   email: string | null = '';
 
-  constructor(private UsuarioService: UsuarioService) { }
+  constructor(private readonly usuarioService: UsuarioService) { }
 
   ngOnInit(): void {
     this.getUserInfo();
   }
 
   getUserInfo(): void {
-    const user = JSON.parse(localStorage.getItem('user')!);
-    if (user) {
-      this.nombre = user.nombre;
-      this.apellido = user.apellido;
-      this.email = user.email;
+    const userData = localStorage.getItem('user');
+
+    if (userData) {
+      try {
+        const user = JSON.parse(userData);
+        this.nombre = user?.nombre || '';
+        this.apellido = user?.apellido || '';
+        this.email = user?.email || '';
+      } catch (error) {
+        console.error('Error al leer datos del usuario:', error);
+      }
     }
   }
 }

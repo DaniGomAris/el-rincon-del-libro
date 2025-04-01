@@ -6,9 +6,9 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class UsuarioService {
-  private apiUrl = 'http://localhost:3001';
+  private readonly apiUrl = 'http://localhost:3001';
 
-  constructor(private http: HttpClient) { }
+  constructor(private readonly http: HttpClient) { }
 
   login(email: string, password: string): Observable<any> {
     return this.http.post(`${this.apiUrl}/user/login`, { email, password });
@@ -40,7 +40,7 @@ export class UsuarioService {
       localStorage.removeItem('user');
     }
   }
-  
+
   isLoggedIn(): boolean {
     if (typeof window !== 'undefined') {
       return localStorage.getItem('user') !== null;

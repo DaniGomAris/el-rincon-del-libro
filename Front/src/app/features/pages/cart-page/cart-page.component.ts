@@ -17,48 +17,47 @@ export class CartPageComponent implements OnInit {
   carrito: any[] = [];
   total: number = 0;
 
-  constructor(private cartService: CartService) {}
+  constructor(private readonly cartService: CartService) {} 
 
   ngOnInit(): void {
     this.carrito = this.cartService.obtenerCarrito();
-    this.calcularTotal();
     this.carrito.forEach(libro => {
-      if (!libro.cantidad) {
-        libro.cantidad = 1;
-      }
+      libro.cantidad = libro.cantidad || 1;
+      libro.precioPorCantidad = libro.precio * libro.cantidad;
     });
+    this.calcularTotal();
   }
 
-  // Metodo para eliminar un libro del carrito
-  eliminarDelCarrito(index: number) {
+  // Método para eliminar un libro del carrito
+  eliminarDelCarrito(index: number): void {
     this.cartService.eliminarDelCarrito(index);
     this.carrito = this.cartService.obtenerCarrito();
     this.calcularTotal();
   }
 
-  // Metodo para actualizar el precio de un libro según su cantidad
-  actualizarPrecio(index: number) {
+  // Método para actualizar el precio de un libro según su cantidad
+  actualizarPrecio(index: number): void {
     const libro = this.carrito[index];
     libro.precioPorCantidad = libro.precio * libro.cantidad;
     this.calcularTotal();
   }
 
   // Calcular el total general del carrito
-  calcularTotal() {
-    this.total = this.carrito.reduce((sum, libro) => sum + (libro.precioPorCantidad || (libro.precio * libro.cantidad) || 0), 0);
+  calcularTotal(): void {
+    this.total = this.carrito.reduce((sum, libro) => sum + (libro.precioPorCantidad ?? libro.precio * libro.cantidad), 0);
   }
 
-  procederAlPago() {
+  // Método para proceder al pago
+  procederAlPago(): void {
     alert("Redirigiendo a la página de pagos");
-
     this.cartService.limpiarCarrito();
     this.carrito = [];
     this.total = 0;
   }
 
-  eliminarCarrito() {
+  // Método para eliminar todo el carrito
+  eliminarCarrito(): void {
     alert("Libros del carrito eliminados");
-
     this.cartService.limpiarCarrito();
     this.carrito = [];
     this.total = 0;

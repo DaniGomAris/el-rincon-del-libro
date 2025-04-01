@@ -1,8 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { HeaderComponent } from "../../../layout/pages/header/header.component";
 import { FooterComponent } from "../../../layout/pages/footer/footer.component";
-import { RouterLink } from '@angular/router';
 import { CartService } from '../../../services/cart.service';
 
 @Component({
@@ -17,20 +16,18 @@ export class InformacionLibroComponent implements OnInit {
   precio: number = 0;
 
   constructor(
-    private route: ActivatedRoute,
-    private router: Router,
-    private cartService: CartService
-  ) { }
+    private readonly route: ActivatedRoute,
+    private readonly router: Router,
+    private readonly cartService: CartService
+  ) {}
 
   ngOnInit(): void {
-    const libroId = this.route.snapshot.paramMap.get('id');
     const stateData = history.state;
 
     if (stateData.libro) {
       this.libro = stateData.libro;
-      this.precio = stateData.precio;
+      this.precio = stateData.precio || Math.floor(Math.random() * (100 - 5 + 1)) + 5;
     } else {
-      // Si no hay datos, redirigir al home
       this.router.navigate(['/']);
     }
   }

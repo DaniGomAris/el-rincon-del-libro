@@ -1,10 +1,9 @@
 import { Component, HostListener, OnInit } from '@angular/core';
-import { RouterModule } from '@angular/router';
+import { RouterModule, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { LibroService } from '../../../services/libro.service';
 import { UsuarioService } from '../../../services/usuario.service';
-import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-header',
@@ -21,9 +20,9 @@ export class HeaderComponent implements OnInit {
   usuarioLogueado: string | null = null;
 
   constructor(
-    private libroService: LibroService,
-    private usuarioService: UsuarioService,
-    private router: Router
+    private readonly libroService: LibroService,
+    private readonly usuarioService: UsuarioService,
+    private readonly router: Router
   ) {}
 
   ngOnInit(): void {
@@ -41,15 +40,12 @@ export class HeaderComponent implements OnInit {
 
   irAInformacionLibro(libroId: string): void {
     const libroSeleccionado = this.libros.find(libro => libro.key === libroId);
-  
-    if (libroSeleccionado) {
-      this.router.navigate(['/informacion-libro', libroId], {
-        state: {
-          libro: libroSeleccionado,
-          precio: 20
-        }
-      });
-    }
+    if (!libroSeleccionado) return;
+
+    this.router.navigate(['/informacion-libro', libroId], {
+      state: { libro: libroSeleccionado, precio: 20 }
+    });
+    this.resultadosVisible = false; // Ocultar resultados después de la selección
   }
 
   toggleSesionMenu(): void {
@@ -58,25 +54,22 @@ export class HeaderComponent implements OnInit {
 
   cerrarSesion(): void {
     this.usuarioService.logout();
-    this.usuarioLogueado = null; 
+    this.usuarioLogueado = null;
     this.sesionMenuVisible = false;
   }
 
   @HostListener('document:click', ['$event'])
-  oneClickOutside(event: MouseEvent): void {
-    const sesionMenu = document.querySelector('.sesion-menu');
-    if (sesionMenu && !sesionMenu.contains(event.target as Node)) {
-      this.sesionMenuVisible = false;
-    }
-  }
-
-  @HostListener('document:click', ['$event'])
   onClickOutside(event: MouseEvent): void {
+    const target = event.target as Node;
+    const sesionMenu = document.querySelector('.sesion-menu');
     const searchBar = document.querySelector('.search-bar');
     const resultados = document.querySelector('.resultados-libros');
-    
-    if (searchBar && !searchBar.contains(event.target as Node) &&
-      resultados && !resultados.contains(event.target as Node)) {
+
+    if (sesionMenu && !sesionMenu.contains(target)) {
+      this.sesionMenuVisible = false;
+    }
+
+    if (searchBar && !searchBar.contains(target) && resultados && !resultados.contains(target)) {
       this.resultadosVisible = false;
     }
   }

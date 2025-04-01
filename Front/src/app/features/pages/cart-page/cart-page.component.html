@@ -5,6 +5,16 @@
         <div id="content_right">
             <div class="table-wrapper">
                 <table class="cart-table">
+                    <thead>
+                        <tr>
+                            <th>Imagen</th>
+                            <th>Título</th>
+                            <th>Autor</th>
+                            <th>Cantidad</th>
+                            <th>Precio</th>
+                            <th>Acción</th>
+                        </tr>
+                    </thead>
                     <tbody>
                         <tr *ngFor="let libro of carrito; let i = index">
                             <td>
@@ -16,7 +26,7 @@
                             <td>
                                 <input type="number" [(ngModel)]="libro.cantidad" min="1" class="quantity" (ngModelChange)="actualizarPrecio(i)">
                             </td>
-                            <td>${{libro.precio * libro.cantidad}}</td>
+                            <td>${{ libro.precio * libro.cantidad }}</td>
                             <td>
                                 <button class="remove-item" (click)="eliminarDelCarrito(i)">
                                     <i class="fas fa-trash"></i> Eliminar
@@ -26,7 +36,7 @@
                     </tbody>
                 </table>
             </div>
-            <<div class="empty-button-container">
+            <div class="empty-button-container">
                 <button class="empty-button" (click)="eliminarCarrito()">Vaciar carrito</button>
             </div>
             <div class="total-price-container">
@@ -34,7 +44,7 @@
                     Precio Total: ${{ total || 0 }}
                 </button>
             </div>
-            <<div class="buy-button-container">
+            <div class="buy-button-container">
                 <button class="buy-button" (click)="procederAlPago()">Proceder al pago</button>
             </div>
         </div>

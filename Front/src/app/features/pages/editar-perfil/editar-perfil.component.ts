@@ -14,18 +14,18 @@ import { FooterComponent } from "../../../layout/pages/footer/footer.component";
 })
 export class EditarPerfilComponent implements OnInit {
   profileForm: FormGroup;
-  user: any;
+  user: any = null;
 
   constructor(
-    private usuarioService: UsuarioService,
-    private fb: FormBuilder,
-    private router: Router
+    private readonly usuarioService: UsuarioService,
+    private readonly fb: FormBuilder,
+    private readonly router: Router
   ) {
     this.profileForm = this.fb.group({
-      nombre: ['', [Validators.required]],
-      apellido: ['', [Validators.required]],
+      nombre: ['', Validators.required],
+      apellido: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
-      password: ['', [Validators.required]]
+      password: ['']
     });
   }
 
@@ -33,37 +33,41 @@ export class EditarPerfilComponent implements OnInit {
     this.loadUserData();
   }
 
-  loadUserData() {
-    if (this.usuarioService.isLoggedIn()) {
-      const userData = JSON.parse(localStorage.getItem('user')!);
-      this.user = userData;
-
-      this.profileForm.patchValue({
-        nombre: this.user.nombre,
-        apellido: this.user.apellido,
-        email: this.user.email,
-        password: ''
-      });
-    } else {
+  private loadUserData(): void {
+    if (!this.usuarioService.isLoggedIn()) {
       this.router.navigate(['/sign-in']);
+      return;
+    }
+
+    const userData = localStorage.getItem('user');
+    if (userData) {
+      this.user = JSON.parse(userData);
+      this.profileForm.patchValue({
+        nombre: this.user.nombre || '',
+        apellido: this.user.apellido || '',
+        email: this.user.email || ''
+      });
     }
   }
 
-  updateProfile() {
-    if (this.profileForm.valid) {
-      const { nombre, apellido, email, password } = this.profileForm.value;
-      const token = this.user.token;
-
-      this.usuarioService.updateUser(nombre, apellido, email, password, token).subscribe({
-        next: (response) => {
-          alert('Perfil actualizado con éxito!');
-          this.router.navigate(['/informacion-perfil']);
-        },
-        error: (err) => {
-          console.error('Error al actualizar perfil', err);
-          alert('Hubo un error al actualizar los datos.');
-        }
-      });
+  updateProfile(): void {
+    if (this.profileForm.invalid) {
+      alert("Por favor, completa correctamente los campos.");
+      return;
     }
+
+    const { nombre, apellido, email, password } = this.profileForm.value;
+    const token = this.user?.token;
+
+    this.usuarioService.updateUser(nombre, apellido, email, password, token).subscribe({
+      next: () => {
+        alert('Perfil actualizado con éxito!');
+        this.router.navigate(['/informacion-perfil']);
+      },
+      error: (err) => {
+        console.error('Error al actualizar perfil', err);
+        alert('Hubo un error al actualizar los datos.');
+      }
+    });
   }
 }
