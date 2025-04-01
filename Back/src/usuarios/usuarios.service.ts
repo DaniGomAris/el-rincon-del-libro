@@ -1,4 +1,4 @@
-import { Injectable, ConflictException } from '@nestjs/common';
+import { Injectable, ConflictException, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Usuario } from '../entities/usuario.entity';
@@ -7,7 +7,7 @@ import { Usuario } from '../entities/usuario.entity';
 export class UsuariosService {
   constructor(
     @InjectRepository(Usuario)
-    private usuariosRepository: Repository<Usuario>,
+    private readonly usuariosRepository: Repository<Usuario>,
   ) {}
 
   // Registrar un nuevo usuario
@@ -16,7 +16,6 @@ export class UsuariosService {
     if (existingUser) {
       throw new ConflictException('El correo electrónico ya está en uso');
     }
-
     const newUser = this.usuariosRepository.create(usuario);
     return this.usuariosRepository.save(newUser);
   }
@@ -28,12 +27,15 @@ export class UsuariosService {
 
   // Actualizar un usuario
   async updateUser(id: number, updates: Partial<Usuario>): Promise<Usuario> {
-    const user = await this.usuariosRepository.findOne({ where: { id } });
-    if (!user) {
-      throw new Error('Usuario no encontrado');
+    try {
+      const user = await this.usuariosRepository.findOneOrFail({ where: { id } });
+      await this.usuariosRepository.update(id, updates);
+      return this.usuariosRepository.findOne({ where: { id } });
+    } catch (error) {
+      if (error.name === 'EntityNotFound') {
+        throw new NotFoundException('Usuario no encontrado');
+      }
+      throw error; // Si es otro tipo de error, lo lanzamos nuevamente
     }
-
-    await this.usuariosRepository.update(id, updates);
-    return this.usuariosRepository.findOne({ where: { id } });
   }
 }
