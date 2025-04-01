@@ -32,12 +32,12 @@
                 <div class="product_info">
                     <p>{{ libro.author_name }}</p>
                     <p>{{ libro.first_publish_year }}</p>
-                    <h3>${{ precios[i] || "$32" }}</h3>
+                    <h3>${{ obtenerPrecio(libro) || "$32" }}</h3> <!-- Cambié esto a obtener el precio usando la función -->
                     <div class="buy_now_button">
                         <a href="javascript:void(0);" (click)="agregarAlCarrito(libro)">Agregar</a>
                     </div>
                     <div class="detail_button">
-                        <a [routerLink]="['/informacion-libro', libro.key]" [state]="{ libro: libro, precio: precios[i] }">Detalles</a>
+                        <a [routerLink]="['/informacion-libro', libro.key]" [state]="{ libro: libro, precio: obtenerPrecio(libro) }">Detalles</a>
                     </div>
                 </div>
                 <div class="cleaner">&nbsp;</div>

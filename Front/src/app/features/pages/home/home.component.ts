@@ -68,7 +68,7 @@ export class HomeComponent implements OnInit {
   }
 
   obtenerPrecio(libro: any): number {
-    return this.precios.get(libro.key) || 32;
+    return this.precios.get(libro.key) || 32; // Usa la clave para obtener el precio
   }
 
   private mostrarLibrosAleatorios(): void {
