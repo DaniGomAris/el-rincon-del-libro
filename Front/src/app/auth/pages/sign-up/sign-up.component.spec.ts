@@ -1,11 +1,13 @@
+// sign-up.component.spec.ts
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { SignUpComponent } from './sign-up.component';
-import { ReactiveFormsModule } from '@angular/forms';
+import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { of } from 'rxjs';
 import { UsuarioService } from '../../../services/usuario.service';
 import { HttpClientModule } from '@angular/common/http';
 import { ActivatedRoute } from '@angular/router';
+import { By } from '@angular/platform-browser';
 
 describe('SignUpComponent', () => {
   let component: SignUpComponent;
@@ -18,10 +20,8 @@ describe('SignUpComponent', () => {
     mockRouter = jasmine.createSpyObj('Router', ['navigate']);
 
     await TestBed.configureTestingModule({
-      imports: [
-        ReactiveFormsModule,
-        HttpClientModule
-      ],
+      imports: [ReactiveFormsModule, FormsModule, HttpClientModule],
+      declarations: [SignUpComponent],
       providers: [
         { provide: UsuarioService, useValue: mockUsuarioService },
         { provide: Router, useValue: mockRouter },
@@ -37,69 +37,108 @@ describe('SignUpComponent', () => {
     fixture.detectChanges();
   });
 
+  const expectInvalid = (controlName: string) => {
+    const control = component.registerForm.get(controlName);
+    expect(control?.invalid).withContext(`${controlName} debe ser inválido`).toBeTrue();
+  };
+
   it('debe crear el componente', () => {
     expect(component).toBeTruthy();
   });
 
-  // CP 01 - Validar nombre solo letras
   it('debe rechazar nombre con caracteres especiales', () => {
-    component.registerForm.controls['nombre'].setValue('Juan123');
-    expect(component.registerForm.controls['nombre'].valid).toBeFalse();
+    const nombreControl = component.registerForm.get('nombre');
+    nombreControl?.setValue('Juan123');
+    expectInvalid('nombre');
   });
 
-  // CP 02 - Validar apellido solo letras
   it('debe rechazar apellido con caracteres especiales', () => {
-    component.registerForm.controls['apellido'].setValue('Pérez@!');
-    expect(component.registerForm.controls['apellido'].valid).toBeFalse();
+    component.registerForm.get('apellido')?.setValue('Pérez@!');
+    expectInvalid('apellido');
   });
 
-  // CP 03 - Contraseña con al menos una mayúscula
   it('debe rechazar contraseña sin mayúscula', () => {
-    component.registerForm.controls['password'].setValue('password123');
-    const tieneMayuscula = /[A-Z]/.test(component.registerForm.controls['password'].value);
-    expect(tieneMayuscula).toBeFalse();
+    component.registerForm.get('password')?.setValue('password123');
+    const value = component.registerForm.get('password')?.value;
+    expect(/[A-Z]/.test(value)).withContext('La contraseña debe tener una mayúscula').toBeFalse();
   });
 
-  // CP 04 - Contraseña con al menos 8 caracteres
   it('debe rechazar contraseña con menos de 8 caracteres', () => {
-    component.registerForm.controls['password'].setValue('Pass1');
-    expect(component.registerForm.controls['password'].valid).toBeFalse();
+    component.registerForm.get('password')?.setValue('Pass1');
+    expectInvalid('password');
   });
 
-  // CP 05 - Contraseña con al menos un número
   it('debe rechazar contraseña sin números', () => {
-    component.registerForm.controls['password'].setValue('Password');
-    const tieneNumero = /\d/.test(component.registerForm.controls['password'].value);
-    expect(tieneNumero).toBeFalse();
+    component.registerForm.get('password')?.setValue('Password');
+    const value = component.registerForm.get('password')?.value;
+    expect(/\d/.test(value)).withContext('La contraseña debe tener al menos un número').toBeFalse();
   });
 
-  // CP 06 - Email con dominio válido
   it('debe rechazar email inválido', () => {
-    component.registerForm.controls['email'].setValue('correo@sinDominio');
-    expect(component.registerForm.controls['email'].valid).toBeFalse();
+    component.registerForm.get('email')?.setValue('correo@sinDominio');
+    expectInvalid('email');
   });
 
-  // CP 07 - Nombre no puede estar vacío
-  it('debe marcar nombre como inválido si está vacío', () => {
-    component.registerForm.controls['nombre'].setValue('');
-    expect(component.registerForm.controls['nombre'].valid).toBeFalse();
+  it('debe marcar campos vacíos como inválidos', () => {
+    component.registerForm.setValue({
+      nombre: '',
+      apellido: '',
+      email: '',
+      password: ''
+    });
+
+    ['nombre', 'apellido', 'email', 'password'].forEach(expectInvalid);
   });
 
-  // CP 08 - Apellido no puede estar vacío
-  it('debe marcar apellido como inválido si está vacío', () => {
-    component.registerForm.controls['apellido'].setValue('');
-    expect(component.registerForm.controls['apellido'].valid).toBeFalse();
+  it('debe enviar el formulario correctamente si es válido', () => {
+    const datos = {
+      nombre: 'Juan',
+      apellido: 'Pérez',
+      email: 'juan@mail.com',
+      password: 'Pass1234'
+    };
+
+    component.registerForm.setValue(datos);
+    mockUsuarioService.register.and.returnValue(of({ success: true }));
+
+    component.onSubmit();
+
+    expect(mockUsuarioService.register).toHaveBeenCalledWith(
+      datos.nombre,
+      datos.apellido,
+      datos.email,
+      datos.password
+    );
+    expect(mockRouter.navigate).toHaveBeenCalledWith(['/sign-in']);
   });
 
-  // CP 09 - Email no puede estar vacío
-  it('debe marcar email como inválido si está vacío', () => {
-    component.registerForm.controls['email'].setValue('');
-    expect(component.registerForm.controls['email'].valid).toBeFalse();
-  });
+  it('debe permitir al usuario llenar el formulario y enviarlo (UX)', () => {
+    const nombreInput = fixture.debugElement.query(By.css('input[formControlName="nombre"]')).nativeElement;
+    const apellidoInput = fixture.debugElement.query(By.css('input[formControlName="apellido"]')).nativeElement;
+    const emailInput = fixture.debugElement.query(By.css('input[formControlName="email"]')).nativeElement;
+    const passInput = fixture.debugElement.query(By.css('input[formControlName="password"]')).nativeElement;
+    const form = fixture.debugElement.query(By.css('form'));
 
-  // CP 10 - Contraseña no puede estar vacía
-  it('debe marcar contraseña como inválida si está vacía', () => {
-    component.registerForm.controls['password'].setValue('');
-    expect(component.registerForm.controls['password'].valid).toBeFalse();
+    mockUsuarioService.register.and.returnValue(of({ success: true }));
+
+    nombreInput.value = 'Ana';
+    nombreInput.dispatchEvent(new Event('input'));
+    apellidoInput.value = 'Martínez';
+    apellidoInput.dispatchEvent(new Event('input'));
+    emailInput.value = 'ana@mail.com';
+    emailInput.dispatchEvent(new Event('input'));
+    passInput.value = 'Ana12345';
+    passInput.dispatchEvent(new Event('input'));
+    form.triggerEventHandler('submit', null);
+    fixture.detectChanges();
+
+    // Assert
+    expect(mockUsuarioService.register).toHaveBeenCalledWith(
+      'Ana',
+      'Martínez',
+      'ana@mail.com',
+      'Ana12345'
+    );
+    expect(mockRouter.navigate).toHaveBeenCalledWith(['/sign-in']);
   });
 });

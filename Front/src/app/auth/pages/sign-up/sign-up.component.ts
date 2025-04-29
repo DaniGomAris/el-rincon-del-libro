@@ -35,13 +35,13 @@ export class SignUpComponent {
     });
   }
 
-  onRegister() {
+  onSubmit(): void {
     console.log('Formulario enviado');
     if (this.registerForm.valid) {
       const { nombre, apellido, email, password } = this.registerForm.value;
-  
+
       console.log('Datos del formulario:', { nombre, apellido, email, password });
-  
+
       this.usuarioService.register(nombre, apellido, email, password).subscribe({
         next: (response) => {
           console.log('Usuario registrado exitosamente:', response);

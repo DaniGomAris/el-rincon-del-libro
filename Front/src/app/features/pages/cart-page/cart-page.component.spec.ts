@@ -22,83 +22,113 @@ describe('CartPageComponent', () => {
     await TestBed.configureTestingModule({
       imports: [CartPageComponent, ReactiveFormsModule],
       providers: [{ provide: CartService, useValue: mockCartService }]
-    })
-    .compileComponents();
+    }).compileComponents();
 
     fixture = TestBed.createComponent(CartPageComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it('debería crear el componente', () => {
     expect(component).toBeTruthy();
   });
 
-  // Prueba: Verificar que el libro se agrega al carrito correctamente
-  it('debe agregar un libro al carrito correctamente', () => {
+  it('debería agregar un libro al carrito correctamente', () => {
+    // Arrange
     const libro = { title: 'Libro 2', author_name: 'Autor 2', precio: 15, cantidad: 1, cover_i: null };
     mockCartService.obtenerCarrito.and.returnValue([libro]);
 
+    // Act
     component.carrito = mockCartService.obtenerCarrito();
     component.actualizarPrecio(0);
 
+    // Assert
     expect(component.carrito.length).toBe(1);
     expect(component.carrito[0].title).toBe('Libro 2');
+    expect(component.total).toBeGreaterThan(0);
   });
 
-  // Prueba: Verificar que el precio total se calcula correctamente
-  it('debe calcular el precio total correctamente', () => {
+  it('debería calcular el precio total correctamente', () => {
+    // Arrange
     mockCartService.obtenerCarrito.and.returnValue([
       { title: 'Libro 1', author_name: 'Autor 1', precio: 20, cantidad: 2, cover_i: null },
       { title: 'Libro 2', author_name: 'Autor 2', precio: 15, cantidad: 3, cover_i: null }
     ]);
 
+    // Act
     component.carrito = mockCartService.obtenerCarrito();
     component.calcularTotal();
 
+    // Assert
     expect(component.total).toBe(105);
+    expect(component.total).toBeGreaterThan(0);
   });
 
-  // Prueba: Verificar que el libro se elimina del carrito correctamente
-  it('debe eliminar un libro del carrito correctamente', () => {
-    mockCartService.obtenerCarrito.and.returnValue([
-      { title: 'Libro 1', author_name: 'Autor 1', precio: 20, cantidad: 2, cover_i: null }
-    ]);
+  it('debería eliminar un libro del carrito correctamente', () => {
+    // Arrange
+    mockCartService.obtenerCarrito.and.returnValue([]);
     spyOn(component, 'calcularTotal');
 
+    // Act
     component.eliminarDelCarrito(0);
 
+    // Assert
     expect(mockCartService.eliminarDelCarrito).toHaveBeenCalledWith(0);
     expect(component.carrito.length).toBe(0);
     expect(component.calcularTotal).toHaveBeenCalled();
   });
 
-  // Prueba: Verificar que el carrito se vacía correctamente
-  it('debe vaciar el carrito correctamente', () => {
-    mockCartService.obtenerCarrito.and.returnValue([
-      { title: 'Libro 1', author_name: 'Autor 1', precio: 20, cantidad: 2, cover_i: null }
-    ]);
+  it('debería vaciar el carrito correctamente', () => {
+    // Arrange
     spyOn(window, 'alert');
-    spyOn(mockCartService, 'limpiarCarrito');
+    mockCartService.obtenerCarrito.and.returnValue([]);
 
+    // Act
     component.eliminarCarrito();
 
+    // Assert
     expect(window.alert).toHaveBeenCalledWith('Libros del carrito eliminados');
     expect(mockCartService.limpiarCarrito).toHaveBeenCalled();
     expect(component.carrito.length).toBe(0);
+    expect(component.total).toBe(0);
   });
 
-  // Prueba: Verificar que el precio total muestra el valor correcto
-  it('debe mostrar el precio total correctamente en la interfaz', () => {
+  it('debería mostrar el precio total correctamente en la interfaz', () => {
+    // Arrange
     mockCartService.obtenerCarrito.and.returnValue([
       { title: 'Libro 1', author_name: 'Autor 1', precio: 20, cantidad: 2, cover_i: null }
     ]);
+
     component.carrito = mockCartService.obtenerCarrito();
     component.calcularTotal();
     fixture.detectChanges();
 
+    // Act
     const totalPriceElement = fixture.debugElement.query(By.css('.total-price-button'));
 
+    // Assert
     expect(totalPriceElement.nativeElement.textContent).toContain('Precio Total: $40');
+  });
+
+  it('debería simular el flujo completo: agregar, actualizar y proceder al pago', () => {
+    // Arrange
+    spyOn(window, 'alert');
+
+    component.carrito = [
+      { title: 'Libro 3', author_name: 'Autor 3', precio: 10, cantidad: 1, cover_i: null }
+    ];
+    component.calcularTotal();
+    fixture.detectChanges();
+
+    const buyButton = fixture.debugElement.query(By.css('.buy-button'));
+
+    // Act
+    buyButton.triggerEventHandler('click');
+    fixture.detectChanges();
+
+    // Assert
+    expect(window.alert).toHaveBeenCalledWith('Redirigiendo a la página de pagos');
+    expect(component.total).toBe(0);
+    expect(component.carrito.length).toBe(0);
   });
 });
