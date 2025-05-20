@@ -78,7 +78,5 @@ export class HomeComponent implements OnInit {
   agregarAlCarrito(libro: any): void {
     const precio = this.obtenerPrecio(libro);
     const libroConPrecio = { ...libro, precio };
-    this.cartService.agregarAlCarrito(libroConPrecio);
-    alert(`${libro.title} ha sido añadido al carrito.`);
-  }
+    this.cartService.agregarAlCarrito(libroConPrecio);  }
 }
